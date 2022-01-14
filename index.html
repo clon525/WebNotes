@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+    <style>
+        @media (min-width: 800px) {
+            .col-lg-5 {
+                -webkit-flex: 0 0 41%;
+                -ms-flex: 0 0 41%;
+                flex: 0 0 41%;
+                max-width: 41%;
+            }
+
+            .col-lg-2 {
+                -webkit-flex: 0 0 16%;
+                -ms-flex: 0 0 16%;
+                flex: 0 0 16%;
+                max-width: 16%;
+            }
+
+            .col-lg-10 {
+                -webkit-flex: 0 0 83%;
+                -ms-flex: 0 0 83%;
+                flex: 0 0 83%;
+                max-width: 83%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .col-10 {
+                -webkit-flex: 0 0 83%;
+                -ms-flex: 0 0 83%;
+                flex: 0 0 83%;
+                max-width: 83%;
+            }
+
+            .col-12 {
+                -webkit-flex: 0 0 100%;
+                -ms-flex: 0 0 100%;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        .w-100 {
+            width: 100% !important;
+        }
+
+        .yellow-border {
+            border: 2px yellow solid;
+        }
+
+        .row {
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin-right: -7.5px;
+            margin-left: -7.5px;
+        }
+
+        .note-img {
+            float: right;
+            margin: 7px 0 7px 7px;
+            width: auto !important;
+            max-width:50%!important;
+            height:100px!important;
+        }
+
+        .btn {
+            border: 2px solid black; /* this is the same as the "normal" state border */
+            padding: 2px;
+            float: right;
+        }
+
+        div .active {
+            background-color: yellow;
+        }
+
+        .m-st {
+            margin: 3px;
+        }
+
+        .p-st {
+            padding: 15px !important;
+        }
+
+        .noteTitleButton {
+            border: 4px solid black;
+            padding: 4px;
+        }
+
+        textarea {
+            width: 80%;
+        }
+    </style>
+</head>
+<body class="row">
+<div class="listBlock col-lg-5 col-10 m-st">
+    <div id="noteList"></div>
+    <a id="openAddButton" class="btn noteTitleButton" onclick="openAddNote();">Добавить</a>
+</div>
+<div class="formBlock col-lg-5 col-10">
+    <div class="w-100" id="addNoteBlock" style="display:none;">
+        <form id="noteForm" class="yellow-border p-st ">
+            <div class="row m-st">
+                <label for="addTitle" class="col-lg-2 col-12 col-form-label">Заголовок</label>
+                <div class="col-lg-10 col-12">
+                    <input type="text" class="form-control" id="addTitle" placeholder="Заголовок">
+                </div>
+            </div>
+            <div class="row m-st">
+                <label for="addLink" class="col-lg-2 col-12 col-form-label">Ссылка</label>
+                <div class="col-lg-10 col-12">
+                    <input type="text" class="form-control" id="addLink" placeholder="Ссылка">
+                </div>
+            </div>
+            <div class="row m-st">
+                <label for="addText" class="col-lg-2 col-12 col-form-label">Текст</label>
+                <div class="col-lg-10 col-12">
+                    <textarea class="form-control" id="addText" placeholder="Текст" rows="10" cols="10"></textarea>
+                </div>
+            </div>
+        </form>
+        <a id="addButton" class="btn m-st" onclick="addNote();">Добавить</a>
+    </div>
+    <div class="w-100" id="showNoteBlock" style="display:none;">
+        <div id="showCard" class="yellow-border p-st ">
+            <img id="noteImg" src="..." align="right" class="note-img">
+            <p id="noteText"></p>
+        </div>
+        <a id="deleteButton" class="btn" onclick="deleteActiveNote();">Удалить</a>
+    </div>
+</div>
+
+<script>
+
+    function openAddNote() {
+        document.querySelectorAll('.noteTitleButton').forEach(function (b) {
+            b.classList.remove("active");
+        });
+        document.getElementById("openAddButton").classList.add("active");
+        document.getElementById("showNoteBlock").style.display = 'none';
+        document.getElementById("noteForm").reset();
+        document.getElementById("addNoteBlock").style.display = '';
+    }
+
+    function addNote() {
+        var title = document.getElementById("addTitle").value;
+        var link = document.getElementById("addLink").value;
+        var text = document.getElementById("addText").value;
+        var elem = document.createElement('div');
+        elem.classList.add("noteTitleButton");
+        elem.classList.add("m-st");
+        elem.setAttribute("data-title", title);
+        elem.setAttribute("data-link", link);
+        elem.setAttribute("data-text", text);
+        elem.setAttribute("onclick", "openShowNote(this)");
+        elem.append(title);
+        document.getElementById("noteList").append(elem);
+    }
+
+    function openShowNote(button) {
+        document.querySelectorAll('.noteTitleButton').forEach(function (b) {
+            b.classList.remove("active");
+        });
+        button.classList.add("active");
+        var link = button.getAttribute("data-link");
+        var text = button.getAttribute("data-text");
+        document.getElementById("noteImg").src = link;
+        document.getElementById("noteText").innerHTML = text;
+        document.getElementById("showNoteBlock").style.display = '';
+        document.getElementById("noteForm").reset();
+        document.getElementById("addNoteBlock").style.display = 'none';
+
+    }
+
+    function deleteActiveNote() {
+        document.querySelectorAll('div .active').forEach(function (b) {
+            b.remove();
+        });
+        openAddNote();
+    }
+</script>
+</body>
+</html>
