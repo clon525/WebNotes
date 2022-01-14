@@ -71,7 +71,7 @@
         }
 
         .btn {
-            border: 2px solid black;
+            border: 2px solid black; /* this is the same as the "normal" state border */
             padding: 2px;
             float: right;
         }
@@ -137,7 +137,6 @@
 </div>
 
 <script>
-
     function openAddNote() {
         document.querySelectorAll('.noteTitleButton').forEach(function (b) {
             b.classList.remove("active");
@@ -149,15 +148,13 @@
     }
 
     function addNote() {
-        var title = document.getElementById("addTitle").value;
-        var link = document.getElementById("addLink").value;
-        var text = document.getElementById("addText").value;
         var elem = document.createElement('div');
         elem.classList.add("noteTitleButton");
         elem.classList.add("m-st");
+        var title = document.getElementById("addTitle").value;
         elem.setAttribute("data-title", title);
-        elem.setAttribute("data-link", link);
-        elem.setAttribute("data-text", text);
+        elem.setAttribute("data-link", document.getElementById("addLink").value);
+        elem.setAttribute("data-text", document.getElementById("addText").value);
         elem.setAttribute("onclick", "openShowNote(this)");
         elem.append(title);
         document.getElementById("noteList").append(elem);
@@ -168,10 +165,8 @@
             b.classList.remove("active");
         });
         button.classList.add("active");
-        var link = button.getAttribute("data-link");
-        var text = button.getAttribute("data-text");
-        document.getElementById("noteImg").src = link;
-        document.getElementById("noteText").innerHTML = text;
+        document.getElementById("noteImg").src = button.getAttribute("data-link");
+        document.getElementById("noteText").innerHTML = button.getAttribute("data-text");
         document.getElementById("showNoteBlock").style.display = '';
         document.getElementById("noteForm").reset();
         document.getElementById("addNoteBlock").style.display = 'none';
